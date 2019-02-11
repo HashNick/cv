@@ -28,8 +28,14 @@ Complete la tabla:
 |-----------------|-------------|
 |Nicolas Maldonado|  HashNick   |
 
+## Desarrollo
+
+Para la representación de la malla poligonal se implemento la forma Face-vertex en los modos retenido e inmediato. Conrespecto a la anterior entrega se corrigio la forma retenida ya que se estaba realizando de forma erronea, creando un PShape muchas veces en la función render(). Tambien se anexa la representación de la curva de bezier en forma cubica y de grado 7.
+
+Referencias
+https://es.wikipedia.org/wiki/Curva_de_B%C3%A9zier
 
 ## Entrega
 
-* Subir el código al repositorio de la materia antes del 3/2/19 a las 24h.
-* Presentar el trabajo en la clase del 6/2/19 o 7/2/19.
+* Subir el código al repositorio de la materia antes del ~~3/2/19~~ 10/2/19 a las 24h.
+* Presentar el trabajo en la clase del ~~6/2/19 o 7/2/19~~ 13/2/19 o 14/2/19.
