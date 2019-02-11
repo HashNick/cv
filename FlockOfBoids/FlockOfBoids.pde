@@ -23,6 +23,7 @@
  */
 
 import frames.primitives.*;
+import frames.primitives.Vector;
 import frames.core.*;
 import frames.processing.*;
 
@@ -33,8 +34,12 @@ int flockHeight = 720;
 int flockDepth = 600;
 boolean avoidWalls = true;
 
-int initBoidNum = 900; // amount of boids to start the program with
+int initBoidNum = 50; // amount of boids to start the program with
 ArrayList<Boid> flock;
+ArrayList<Vector> puntos;
+Interpolator interpolador;
+InterFun intf3, intf7;
+int[] listaPuntos3, listaPuntos7;
 Frame avatar;
 boolean animate = true;
 
@@ -45,8 +50,23 @@ void setup() {
   scene.fit();
   // create and fill the list of boids
   flock = new ArrayList();
-  for (int i = 0; i < initBoidNum; i++)
+  interpolador = new Interpolator(scene, new Frame());
+  intf3 = new InterFun();
+  intf7 = new InterFun();
+  listaPuntos3 = new int[4];
+  listaPuntos7 = new int[8];
+  
+  for (int i = 0; i < initBoidNum; i++){
+    Frame current = new Frame(scene);
     flock.add(new Boid(new Vector(flockWidth / 2, flockHeight / 2, flockDepth / 2)));
+    current.setPosition(flock.get(i).position);
+    interpolador.addKeyFrame(current);
+  }
+  for (int i = 0; i < 4; i++)
+    listaPuntos3[i] = (int) (Math.random() * initBoidNum);
+    
+  for (int i = 0; i < 8; i++)
+    listaPuntos7[i] = (int) (Math.random() * initBoidNum);
 }
 
 void draw() {
@@ -55,8 +75,28 @@ void draw() {
   directionalLight(255, 255, 255, 0, 1, -100);
   walls();
   scene.traverse();
-  // uncomment to asynchronously update boid avatar. See mouseClicked()
-  // updateAvatar(scene.trackedFrame("mouseClicked"));
+  
+  puntos = new ArrayList<Vector>();
+  
+  for(int i = 0; i < 4; i++){
+    puntos.add( interpolador.keyFrame( listaPuntos3[ i ] ).position() );
+  }
+  
+  intf3.cargarPuntos( puntos );
+  puntos = new ArrayList<Vector>();
+  
+  for(int i = 0; i < 8; i++){
+    puntos.add( interpolador.keyFrame( listaPuntos7[ i ] ).position() );
+  }
+  intf7.cargarPuntos( puntos );
+  
+  scene.beginHUD();
+    text("Bezier cúbico - Blanco", 50, 50);
+    text("Bezier grado 7 - Negro", 50, 100);
+  scene.endHUD();
+  
+  intf3.bezier3();
+  intf7.bezier7();
 }
 
 void walls() {
